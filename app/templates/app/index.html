@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="img/icono.png">
-    <title>HealQuest Lab</title>
-</head>
-<body>
-    <h1>HealQuest Laboratories</h1>
-</body>
-</html>
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block nombre %} Inicio {% endblock %}
+
+{% block contenido %}
+<header class="masthead">
+    <div class="container">
+        <div class="masthead-subheading">Bienvenido a</div>
+        <div class="masthead-heading">HealQuest Labs</div> 
+    </div>
+</header>
+{% endblock %}
