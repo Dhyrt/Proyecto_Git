@@ -10,6 +10,63 @@
         <div class="masthead-heading">HealQuest Labs</div> 
     </div>
 </header>
+
+<div class="container mt-4">
+    <div class="row g-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="d-flex justify-content-center align-items-center p-4 bg-warning bg-opacity-10 rounded-3">
+                <span class="display-6 lh-1 text-warning mb-0"><i class="fas fa-smile"></i></span>
+                <div class="ms-4 h6 fw-normal mb-0">
+                    <div class="d-flex">
+                        <h5 class="purecounter mb-0 fw-bold" data-purecounter-start="0" data-purecounter-end="1000" data-purecounter-delay="200">10mil</h5>
+                        <span class="mb-0 h5">+</span>
+                    </div>
+                    <p class="mb-0">Clientes Satisfechos</p>
+                </div>
+            </div>
+        </div>
+        <!-- Sección 2: Farmacias colaboradoras -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="d-flex justify-content-center align-items-center p-4 bg-primary bg-opacity-10 rounded-3">
+                <span class="display-6 lh-1 text-primary mb-0"><i class="fas fa-store"></i></span>
+                <div class="ms-4 h6 fw-normal mb-0">
+                    <div class="d-flex">
+                        <h5 class="purecounter mb-0 fw-bold" data-purecounter-start="0" data-purecounter-end="50" data-purecounter-delay="200">70</h5>
+                        <span class="mb-0 h5">+</span>
+                    </div>
+                    <p class="mb-0">Farmacias Colaboradoras</p>
+                </div>
+            </div>
+        </div>
+        <!-- Sección 3: Certificaciones -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="d-flex justify-content-center align-items-center p-4 bg-success bg-opacity-10 rounded-3">
+                <span class="display-6 lh-1 text-success mb-0"><i class="fas fa-award"></i></span>
+                <div class="ms-4 h6 fw-normal mb-0">
+                    <div class="d-flex">
+                        <h5 class="purecounter mb-0 fw-bold" data-purecounter-start="0" data-purecounter-end="10" data-purecounter-delay="200">3mil</h5>
+                        <span class="mb-0 h5">+</span>
+                    </div>
+                    <p class="mb-0">Certificaciones</p>
+                </div>
+            </div>
+        </div>
+        <!-- Sección 4: Productos en línea -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="d-flex justify-content-center align-items-center p-4 bg-info bg-opacity-10 rounded-3">
+                <span class="display-6 lh-1 text-info mb-0"><i class="fas fa-capsules"></i></span>
+                <div class="ms-4 h6 fw-normal mb-0">
+                    <div class="d-flex">
+                        <h5 class="purecounter mb-0 fw-bold" data-purecounter-start="0" data-purecounter-end="500" data-purecounter-delay="200">5mil</h5>
+                        <span class="mb-0 h5">+</span>
+                    </div>
+                    <p class="mb-0">Productos en Línea</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container mt-5">
     <div class="row">
         <h3 class="mb-4">Opiniones de clientes reales</h3>
@@ -17,7 +74,7 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <div>
-                        <p>Puntuación: 5/5</p>
+                        <p class="text-warning">Puntuación: 5/5</p>
                     </div>
                     <h5 class="card-title">Servicio de primera calidad</h5>
                     <p>"Rápido, eficiente y productos de alta calidad. ¡Totalmente satisfechos!"</p>
@@ -29,7 +86,7 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <div>
-                        <p>Puntuación: 5/5</p>
+                        <p class="text-warning">Puntuación: 5/5</p>
                     </div>
                     <h5 class="card-title">Atención al cliente excepcional</h5>
                     <p>"Respuestas rápidas y soluciones efectivas. ¡Una experiencia sin complicaciones!"</p>
@@ -41,7 +98,7 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <div>
-                        <p>Puntuación: 5/5</p>
+                        <p class="text-warning">Puntuación: 5/5</p>
                     </div>
                     <h5 class="card-title">Variedad y precios competitivos</h5>
                     <p>"Amplia selección de productos a precios asequibles. ¡Definitivamente volveremos por más!"</p>
@@ -50,58 +107,67 @@
             </div>
         </div>
     </div>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-mb-6 col-xl-3">
-                <div class="d-flex justify-content-center align-items-center p-4 bg-success bg-opacity-10 rounded-3">
-                    <span class="display-6 lh-1 text-info mb-0"><i class="bi bi-patch-check-fill"></i></span>
-                    <div class="ms-4 h6 fw-normal mb-0">
-                        <div class="d-flex">
-                            <h5 class="purecounter mb-0 fw-bold" data-purecounter-start="0" data-purecounter-end="6" data-purecounter-delay="300">0</h5>
-                            <span class="mb-0 h5">K+</span>
+    <div class="container mt-4 mb-5">
+        <h2>Seguimiento de Compras</h2>
+        {% if user.is_authenticated %}
+            <ul class="list-group mb-5">
+                <li class="list-group-item">An item</li>
+                <li class="list-group-item">A second item</li>
+                <li class="list-group-item">A third item</li>
+                <li class="list-group-item">A fourth item</li>
+                <li class="list-group-item">And a fifth one</li>
+            </ul>
+        {% else %}
+            <div class="row mt-4">
+                <div class="d-flex">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="text-center">
+                            <div class="justify-content-center align-items-center p-4 bg-success bg-opacity-10 rounded-3">
+                                <div class="mb-2">
+                                    <span class="display-6 lh-1 text-info"><i class="fa-solid fa-circle-info"></i></span>
+                                </div>
+                                <div class="ms-4 h6 fw-normal mb-0">
+                                    <h3>Para ver esta sección, necesitas iniciar sesión</h3>
+                                    <a href="{% url 'login' %}" class="btn bg-success bg-opacity-10 btn-lg mr-3">Iniciar Sesión</a>
+                                    <h5 class="mt-4">¿Aún no estás registrado?</h5>
+                                    <a href="{% url 'registro' %}" class="btn bg-info bg-opacity-10 btn-lg">Registrarse</a>
+                                </div>
+                            </div>
                         </div>
-                        <p class="mb-0">Certified Courses</p>
                     </div>
+                    <div class="col-md-2"></div>
                 </div>
             </div>
-            <div class="col-mb-6 col-xl-3">
-                <div class="d-flex justify-content-center align-items-center p-4 bg-info bg-opacity-10 rounded-3">
-                    <span class="display-6 lh-1 text-info mb-0"><i class="bi bi-patch-check-fill"></i></span>
-                    <div class="ms-4 h6 fw-normal mb-0">
-                        <div class="d-flex">
-                            <h5 class="purecounter mb-0 fw-bold" data-purecounter-start="0" data-purecounter-end="6" data-purecounter-delay="300">0</h5>
-                            <span class="mb-0 h5">K+</span>
-                        </div>
-                        <p class="mb-0">Certified Courses</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+            
+        {% endif %}
     </div>
-    
-    <ul class="list-group mb-5">
-        <li class="list-group-item">An item</li>
-        <li class="list-group-item">A second item</li>
-        <li class="list-group-item">A third item</li>
-        <li class="list-group-item">A fourth item</li>
-        <li class="list-group-item">And a fifth one</li>
-    </ul>
     <div class="container">
         <div class="row">
-            <h2 class="mb-4">Noticias del Sector</h2>
+            <h3 class="mb-4">Noticias del Sector</h3>
             <div class="col-lg-3 mb-4">
                 <div class="card">
-                    <img src="{% static 'app/img/inyeccion.jpg' %}" class="card-img-top" alt="Imagen artículo 1" style="height: 200px; width: 300px;">
+                    <img src="{% static 'app/img/inyeccion.jpg' %}" class="card-img-top" alt="Imagen artículo 1" style="height: 200px; width: 297px;">
                     <div class="card-body">
                         <h5 class="card-title"><a href="https://www.elmundo.es/internacional/2020/04/24/5ea291adfc6c8309298b45ae.html" target="_blank" style="color: #000;">Una inyección de lejía cura todos los males</a></h5>
                         <p class="card-text">El coronavirus podría tratarse con inyecciones de desinfectante en el cuerpo.</p>
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-3 mb-4">
                 <div class="card">
-                    <img src="{% static 'app/img/orangutan.jpg' %}" class="card-img-top" alt="Imagen artículo 2" style="height: 200px; width: 300px;">
+                    <img src="{% static 'app/img/sal.jpg' %}" class="card-img-top" alt="Imagen artículo 4" style="height: 200px; width: 297px;">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="https://www.elmundotoday.com/2024/02/un-anciano-con-sed-de-venganza-decide-sacarse-medicina-para-acabar-ejerciendo-y-prohibirle-la-sal-al-medico-que-se-la-prohibio-a-el/" target="_blank" style="color: #000;">Un anciano vengativo estudia Medicina para prohibir sal al médico que se la negó</a></h5>
+                        <p class="card-text">"Me ha arruinado la vida, pero me voy a vengar", promete mientras repasa sus apuntes de histología médica.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 mb-4">
+                <div class="card">
+                    <img src="{% static 'app/img/orangutan.jpg' %}" class="card-img-top" alt="Imagen artículo 2" style="height: 200px; width: 297px;">
                     <div class="card-body">
                         <h5 class="card-title"><a href="https://www.elmundotoday.com/2024/05/sanidad-ya-ha-contactado-con-el-orangutan-que-aprendio-a-curarse-una-herida-a-solas-para-que-atienda-a-pacientes-espanoles/" target="_blank" style="color: #000;">Sanidad contacta con orangután autónomo para tratar pacientes españoles</a></h5>
                         <p class="card-text">El Ministerio de Sanidad cree que Rakus podría atender a pacientes españoles en aquellas comunidades autónomas con las urgencias más saturadas.</p>
@@ -110,26 +176,17 @@
             </div>
             <div class="col-lg-3 mb-4">
                 <div class="card">
-                    <img src="{% static 'app/img/neandertal.jpg' %}" class="card-img-top" alt="Imagen artículo 3" style="height: 200px; width: 300px;">
+                    <img src="{% static 'app/img/neandertal.jpg' %}" class="card-img-top" alt="Imagen artículo 3" style="height: 200px; width: 297px;">
                     <div class="card-body">
                         <h5 class="card-title"><a href="https://www.elmundotoday.com/2022/10/nobel-de-medicina-para-el-hombre-que-descifro-el-adn-de-los-neandertales-con-muestras-de-saliva-de-su-cunado-alfonso/" target="_blank" style="color: #000;">Nobel de Medicina para el descifrador del ADN neandertal con saliva de su cuñado</a></h5>
                         <p class="card-text">Rescató el ADN de su cuñado Alfonso aprovechando una muestra de saliva en un vaso de vino que acabó resultando esencial para conocer el genoma de especies extintas.</p>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 mb-4">
-                <div class="card">
-                    <img src="{% static 'app/img/sal.jpg' %}" class="card-img-top" alt="Imagen artículo 4" style="height: 200px; width: 300px;">
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="https://www.elmundotoday.com/2024/02/un-anciano-con-sed-de-venganza-decide-sacarse-medicina-para-acabar-ejerciendo-y-prohibirle-la-sal-al-medico-que-se-la-prohibio-a-el/" target="_blank" style="color: #000;">Un anciano vengativo estudia Medicina para prohibir sal al médico que se la negó</a></h5>
-                        <p class="card-text">"Me ha arruinado la vida, pero me voy a vengar", promete mientras repasa sus apuntes de histología médica.</p>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <div class="row">
-        <h3 class="mb-4">Otras opiniones de clientes</h3>
+        <h5 class="mb-4">Otras opiniones de clientes</h5>
         <div class="col-md-4">
             <div class="card mb-3">
                 <div class="card-body">
