@@ -58,25 +58,16 @@ Django es un framework de desarrollo web robusto y escalable que permite una rá
    ```
    python -m venv venv
    ```
-4. Activar el entorno virtual:
-   - En Windows:
-     ```
-     venv\Scripts\activate
-     ```
-   - En macOS/Linux:
-     ```
-     source venv/bin/activate
-     ```
-5. Instalar las dependencias:
+4. Instalar las dependencias:
    ```
    pip install -r requirements.txt
    ```
-6. Realizar migraciones de la base de datos:
+5. Realizar migraciones de la base de datos:
    ```
    python manage.py migrate
    ```
-7. Ejecutar el servidor de desarrollo:
+6. Ejecutar el servidor de desarrollo:
    ```
    python manage.py runserver
    ```
-8. Abrir un navegador web y navegar a http://127.0.0.1:8000 para ver la aplicación en funcionamiento.
+7. Abrir un navegador web y navegar a http://127.0.0.1:8000 para ver la aplicación en funcionamiento.
