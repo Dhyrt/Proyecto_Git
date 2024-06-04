@@ -18,3 +18,9 @@ def registro(request):
     else:
         form = RegisterForm()
     return render(request,'registration/registro.html', {'form': form})
+
+def orden(request):
+    return render(request, 'app/orden.html')
+
+def factura(request):
+    return render(request, 'app/factura.html')
