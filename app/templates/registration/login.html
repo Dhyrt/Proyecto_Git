@@ -1,0 +1,48 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block nombre %}
+Iniciar sesión
+{% endblock %}
+{% load crispy_forms_tags %}
+{% block contenido %}
+<style>
+    body {
+        background: linear-gradient(#fafafa, #686767b0);
+    }
+
+    .bg {
+        background-image: url(../../static/app/img/farmacia.jpg);
+        background-position: center center;
+        background-size: cover;
+    }
+</style>
+
+<div class="container mb-3 mt-5">
+    <div class="container w-75 mt-3 mb-5 bg-white rounded shadow">
+        <div class="row align-items-stretch">
+            <div class="col bg d-none d-lg-block col-md-5 col-lg-5 col-xl-6">
+            </div>
+            <div class="col w-100 my-5">
+                <div class="container">
+                    <h2 class="fw-bold text-center pt-4 pb-3">Bienvenido</h2>
+                <div class="container px-5">
+                    <div class="row justify-content-center ">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <div class="mt-3">
+                                <input type="submit" value="Ingresar" class="btn btn-success mt-3 ">
+                            </div>
+                            <div class="my-3">
+                                <span><a href="#">Recuperar mi contraseña</a></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
