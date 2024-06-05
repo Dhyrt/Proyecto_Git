@@ -2,7 +2,40 @@
 {% load static %}
 
 {% block nombre %} Realizar orden {% endblock %}
-
+    
 {% block contenido %}
-
+<div class="container mt-5 d-flex justify-content-center align-items-center full-height">
+    <div class="card p-5" style="width: 100%; max-width: 600px;">
+        <div class="text-center mb-4">
+            <h2>Datos Cliente</h2>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{% url 'factura' %}">
+                <div class="form-group">
+                    <label for="nombreCliente">Nombre Cliente/Empresa</label>
+                    <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" required>
+                </div>
+                <div class="form-group">
+                    <label for="direccion">Dirección</label>
+                    <input type="text" class="form-control" id="direccion" name="direccion" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" class="form-control" id="telefono" name="telefono" required>
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo</label>
+                    <input type="email" class="form-control" id="correo" name="correo" required>
+                </div>
+                <div class="form-group">
+                    <label for="codigoPostal">Código Postal</label>
+                    <input type="text" class="form-control" id="codigoPostal" name="codigoPostal" required>
+                </div>
+                <div class="text-right mt-3">
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
