@@ -4,5 +4,83 @@
 {% block nombre %} Realizar orden {% endblock %}
 
 {% block contenido %}
+<div class="container mt-5">
+    <div class="card p-3" id="product-card">
+        <div id="product-forms">
+            <div class="row product-form mb-3">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="producto">Producto</label>
+                        <input type="text" class="form-control" name="producto" placeholder="Nombre del producto">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="cantidad">Cantidad</label>
+                        <input type="number" class="form-control cantidad" name="cantidad" placeholder="Cantidad">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="precio">Precio</label>
+                        <input type="text" class="form-control precio" name="precio" placeholder="Precio">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="total">Total</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="justify-content-start">
+            <button type="button" class="btn btn-primary" id="add-product"><i class="fa-solid fa-plus"></i></button>
+        </div>
+    </div>
+</div>
+<div class="container mt-3">
+    <div class="card p-3">
+        <h5 class="card-title">Finalizar pedido</h5>
+        <div class="card-body">
+            <p class="card-text">Subtotal:</p>
+            <p class="card-text">Iva:</p>
+            <h6>Total:</h6>
+            <button class="btn btn-success">Finalizar pedido</button>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('add-product').addEventListener('click', function() {
+        // Selecciona el primer conjunto de campos
+        var productForm = document.querySelector('.product-form');
+        
+        // Clona el conjunto de campos
+        var newProductForm = productForm.cloneNode(true);
+        
+        // Limpia los valores de los campos del nuevo conjunto
+        var inputs = newProductForm.getElementsByTagName('input');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].value = '';
+        }
+        
+        // Añade el botón de eliminar al nuevo conjunto de campos
+        var removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.className = 'btn btn-danger remove-product';
+        removeButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
+        removeButton.addEventListener('click', function() {
+            newProductForm.remove();
+        });
+        
+        // Añade el botón al nuevo conjunto de campos
+        var col = document.createElement('div');
+        col.className = 'col-md-12 d-flex align-items-end mb-3';
+        col.appendChild(removeButton);
+        newProductForm.appendChild(col);
+        
+        // Añade el nuevo conjunto de campos al contenedor dentro de la misma card
+        document.getElementById('product-forms').appendChild(newProductForm);
+    });
+</script>
 
 {% endblock %}
