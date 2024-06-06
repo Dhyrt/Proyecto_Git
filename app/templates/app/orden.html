@@ -10,7 +10,8 @@
             <h2>Datos Cliente</h2>
         </div>
         <div class="card-body">
-            <form method="POST" action="{% url 'factura' %}">
+            <form method="POST" action="{% if nueva_orden %}{% url 'factura' orden_id=nueva_orden.id %}{% endif %}">
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="nombreCliente">Nombre Cliente/Empresa</label>
                     <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" required>
