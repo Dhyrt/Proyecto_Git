@@ -17,23 +17,6 @@ class Orden(models.Model):
     class Meta:
         db_table = 'db_orden'
 
-class Factura(models.Model):
-    id_factura = models.AutoField(primary_key=True)
-    orden = models.ForeignKey(Orden, on_delete=models.CASCADE)
-    producto = models.CharField(max_length=125)
-    cantidad = models.IntegerField()
-    precio_unitario = models.IntegerField()
-    precio_total = models.IntegerField()
-    subtotal = models.IntegerField()
-    iva = models.IntegerField()
-    total = models.IntegerField()
-
-    def __str__(self):
-        return str(self.id_factura)
-    
-    class Meta:
-        db_table = 'db_factura'
-
 class Estado(models.Model):
     id_estado = models.AutoField(primary_key=True)
     estado = models.CharField(max_length=25)
@@ -44,15 +27,17 @@ class Estado(models.Model):
     class Meta:
         db_table = 'db_estado'
 
-class EstadoOrden(models.Model):
-    id_estado_orden = models.CharField(max_length=10, primary_key=True, editable=False)
-    estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
+class Factura(models.Model):
+    id_factura = models.CharField(max_length=10, primary_key=True, editable=False)
     orden = models.ForeignKey(Orden, on_delete=models.CASCADE)
-    factura = models.ForeignKey(Factura, on_delete=models.CASCADE)
+    estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
+    subtotal = models.IntegerField()
+    iva = models.IntegerField()
+    total = models.IntegerField()
 
     def save(self, *args, **kwargs):
-        if not self.id_estado_orden:
-            self.id_estado_orden = self.generate_unique_id()
+        if not self.id_factura:
+            self.id_factura = self.generate_unique_id()
         super().save(*args, **kwargs)
 
     def generate_unique_id(self):
@@ -60,11 +45,25 @@ class EstadoOrden(models.Model):
         characters = string.ascii_uppercase + string.digits
         while True:
             unique_id = ''.join(random.choice(characters) for _ in range(length))
-            if not EstadoOrden.objects.filter(id_estado_orden=unique_id).exists():
+            if not Factura.objects.filter(id_factura=unique_id).exists():
                 return unique_id
-
+    
     def __str__(self):
-        return self.id_estado_orden
+        return self.id_factura
     
     class Meta:
-        db_table = 'db_estado_orden'
+        db_table = 'db_factura'
+
+class ProductoFactura(models.Model):
+    id_producto_factura = models.AutoField(primary_key=True)
+    factura = models.ForeignKey(Factura, related_name='productos', on_delete=models.CASCADE)
+    producto = models.CharField(max_length=125)
+    cantidad = models.IntegerField()
+    precio_unitario = models.IntegerField()
+    precio_total = models.IntegerField()
+
+    def __str__(self):
+        return str(self.id_producto_factura)
+
+    class Meta:
+        db_table = 'db_producto_factura'

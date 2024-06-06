@@ -4,152 +4,109 @@
 {% block nombre %} Realizar orden {% endblock %}
 
 {% block contenido %}
-<div class="container mt-5">
-    <div class="card p-3" id="product-card">
-        <div id="product-forms">
-            <div class="row product-form mb-3">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="producto">Producto</label>
-                        <input type="text" class="form-control" name="producto" placeholder="Nombre del producto">
+<form method="POST" action="{% url 'factura' orden_id=orden.id_orden %}">
+    {% csrf_token %}
+    <div class="container mt-3">
+        <h2>Detalles de la Orden</h2>
+        <p>Empresa: {{ orden.empresa }}</p>
+        <p>Dirección: {{ orden.direccion }}</p>
+        <div class="card p-3" id="product-card">
+            <div id="product-forms">
+                <div class="row product-form mb-3">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="producto">Producto</label>
+                            <input type="text" class="form-control" name="producto" placeholder="Nombre del producto">
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="cantidad">Cantidad</label>
-                        <!-- Agrega un identificador único al campo de cantidad -->
-                        <input type="number" class="form-control cantidad" id="cantidad1" name="cantidad" placeholder="Cantidad">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="cantidad">Cantidad</label>
+                            <input type="number" class="form-control cantidad" name="cantidad" placeholder="Cantidad">
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="precio">Precio</label>
-                        <!-- Agrega un identificador único al campo de precio -->
-                        <input type="text" class="form-control precio" id="precio1" name="precio" placeholder="Precio">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="precio">Precio</label>
+                            <input type="text" class="form-control precio" name="precio" placeholder="Precio">
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="total">Total</label>
-                        <!-- Agrega un identificador único al campo de total -->
-                        <input type="text" class="form-control total" id="total1" name="total" placeholder="Total" readonly>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="total">Total</label>
+                            <input type="text" class="form-control total" name="total" placeholder="Total" readonly>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="justify-content-start">
-            <button type="button" class="btn btn-primary" id="add-product"><i class="fa-solid fa-plus"></i></button>
-        </div>
-    </div>
-</div>
-<div class="container mt-3">
-    <div class="card p-3">
-        <h5 class="card-title">Finalizar pedido</h5>
-        <div class="card-body">
-            <p class="card-text">Subtotal: <span id="subtotal">0</span></p>
-            <p class="card-text">Iva: <span id="iva">0</span></p>
-            <h6>Total: <span id="total">0</span></h6>
-            <button class="btn btn-success">Finalizar pedido</button>
+            <div class="justify-content-start">
+                <button type="button" class="btn btn-clear text-primary" id="add-product"><i class="fa-solid fa-plus"></i></button>
+            </div>
         </div>
     </div>
-</div>
+    <div class="container mt-3">
+        <div class="card p-3">
+            <h5 class="card-title">Finalizar pedido</h5>
+            <div class="card-body">
+                <input type="hidden" name="empresa" value="{{ orden.empresa }}">
+                <input type="hidden" name="direccion" value="{{ orden.direccion }}">
+                <input type="hidden" name="telefono" value="{{ orden.telefono }}">
+                <input type="hidden" name="correo" value="{{ orden.correo }}">
+                <input type="hidden" name="codigoPostal" value="{{ orden.codigo_postal }}">
+                <p class="card-text">Subtotal: <span id="subtotal">0</span></p>
+                <p class="card-text">Iva: <span id="iva">0</span></p>
+                <h6>Total: <span id="total">0</span></h6>
+                <button type="submit" class="btn btn-success" id="finalizar-pedido">Finalizar pedido</button>
+            </div>
+        </div>
+    </div>
+</form>
+
 <script>
-    // Función para calcular los totales
-    function calcularTotales() {
-        var subTotal = 0;
-        var iva = 0;
-        
-        // Iterar sobre los campos de total para sumarlos
-        var totalInputs = document.querySelectorAll('.total');
-        totalInputs.forEach(function(input) {
-            subTotal += parseInt(input.value) || 0;
-        });
-        
-        // Calcular IVA
-        iva = subTotal * 0.19; // Suponiendo 19% de IVA
-        
-        // Actualizar valores mostrados
-        document.getElementById('subtotal').innerText = subTotal;
-        document.getElementById('iva').innerText = iva;
-        document.getElementById('total').innerText = subTotal + iva;
-    }
-
-    // Función para calcular el total de un conjunto de campos
-    function calcularTotal(cantidadInput, precioInput, totalInput) {
-        var cantidad = cantidadInput.value;
-        var precio = precioInput.value;
-        
-        // Calcula el precio total
-        var precioTotal = cantidad * precio;
-        
-        // Actualiza el campo de precio total
-        totalInput.value = precioTotal;
-
-        // Calcular totales
-        calcularTotales();
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Calcular totales inicialmente
-        calcularTotales();
-
-        // Evento de escucha para campos de cantidad y precio
-        document.querySelectorAll('.product-form').forEach(function(form) {
-            var cantidadInput = form.querySelector('.cantidad');
-            var precioInput = form.querySelector('.precio');
-            var totalInput = form.querySelector('.total');
-
-            cantidadInput.addEventListener('input', function() {
-                calcularTotal(cantidadInput, precioInput, totalInput);
-            });
-
-            precioInput.addEventListener('input', function() {
-                calcularTotal(cantidadInput, precioInput, totalInput);
-            });
-        });
+// Función para calcular los totales
+function calcularTotales() {
+    var subTotal = 0;
+    var iva = 0;
+    
+    // Iterar sobre los campos de total para sumarlos
+    var totalInputs = document.querySelectorAll('.total');
+    totalInputs.forEach(function(input) {
+        subTotal += parseInt(input.value) || 0;
     });
+    
+    // Calcular IVA
+    iva = subTotal * 0.19; // Suponiendo 19% de IVA
+    
+    // Actualizar valores mostrados
+    document.getElementById('subtotal').innerText = subTotal;
+    document.getElementById('iva').innerText = iva;
+    document.getElementById('total').innerText = subTotal + iva;
+}
 
-    document.getElementById('add-product').addEventListener('click', function() {
-        // Selecciona el primer conjunto de campos
-        var productForm = document.querySelector('.product-form');
-        
-        // Clona el conjunto de campos
-        var newProductForm = productForm.cloneNode(true);
-        
-        // Agrega un identificador único a los campos del nuevo conjunto
-        newProductForm.querySelectorAll('input').forEach(function(input) {
-            input.id = input.id + '-' + document.querySelectorAll('.product-form').length;
-        });
-        
-        // Limpia los valores de los campos del nuevo conjunto
-        var inputs = newProductForm.getElementsByTagName('input');
-        for (var i = 0; i < inputs.length; i++) {
-            inputs[i].value = '';
-        }
-        
-        // Añade el botón de eliminar al nuevo conjunto de campos
-        var removeButton = document.createElement('button');
-        removeButton.type = 'button';
-        removeButton.className = 'btn btn-danger remove-product';
-        removeButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
-        removeButton.addEventListener('click', function() {
-            newProductForm.remove();
-            calcularTotales();
-        });
-        
-        // Añade el botón al nuevo conjunto de campos
-        var col = document.createElement('div');
-        col.className = 'col-md-auto d-flex align-items-end';
-        col.appendChild(removeButton);
-        newProductForm.appendChild(col);
-        
-        // Añade el nuevo conjunto de campos al contenedor dentro de la misma card
-        document.getElementById('product-forms').appendChild(newProductForm);
-        
-        // Agrega eventos de escucha para campos de cantidad y precio en el nuevo conjunto de campos
-        var cantidadInput = newProductForm.querySelector('.cantidad');
-        var precioInput = newProductForm.querySelector('.precio');
-        var totalInput = newProductForm.querySelector('.total');
+// Función para calcular el total de un conjunto de campos
+function calcularTotal(cantidadInput, precioInput, totalInput) {
+    var cantidad = cantidadInput.value;
+    var precio = precioInput.value;
+    
+    // Calcula el precio total
+    var precioTotal = cantidad * precio;
+    
+    // Actualiza el campo de precio total
+    totalInput.value = precioTotal;
+
+    // Calcular totales
+    calcularTotales();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Calcular totales inicialmente
+    calcularTotales();
+
+    // Evento de escucha para campos de cantidad y precio
+    document.querySelectorAll('.product-form').forEach(function(form) {
+        var cantidadInput = form.querySelector('.cantidad');
+        var precioInput = form.querySelector('.precio');
+        var totalInput = form.querySelector('.total');
 
         cantidadInput.addEventListener('input', function() {
             calcularTotal(cantidadInput, precioInput, totalInput);
@@ -159,6 +116,57 @@
             calcularTotal(cantidadInput, precioInput, totalInput);
         });
     });
-</script>
+});
 
+document.getElementById('add-product').addEventListener('click', function() {
+    // Selecciona el primer conjunto de campos
+    var productForm = document.querySelector('.product-form');
+    
+    // Clona el conjunto de campos
+    var newProductForm = productForm.cloneNode(true);
+    
+    // Agrega un identificador único a los campos del nuevo conjunto
+    newProductForm.querySelectorAll('input').forEach(function(input) {
+        input.id = input.id + '-' + document.querySelectorAll('.product-form').length;
+    });
+    
+    // Limpia los valores de los campos del nuevo conjunto
+    var inputs = newProductForm.getElementsByTagName('input');
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].value = '';
+    }
+    
+    // Añade el botón de eliminar al nuevo conjunto de campos
+    var removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.className = 'btn btn-clear text-danger remove-product';
+    removeButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
+    removeButton.addEventListener('click', function() {
+        newProductForm.remove();
+        calcularTotales();
+    });
+    
+    // Añade el botón al nuevo conjunto de campos
+    var col = document.createElement('div');
+    col.className = 'col-md-auto d-flex align-items-end';
+    col.appendChild(removeButton);
+    newProductForm.appendChild(col);
+    
+    // Añade el nuevo conjunto de campos al contenedor dentro de la misma card
+    document.getElementById('product-forms').appendChild(newProductForm);
+    
+    // Agrega eventos de escucha para campos de cantidad y precio en el nuevo conjunto de campos
+    var cantidadInput = newProductForm.querySelector('.cantidad');
+    var precioInput = newProductForm.querySelector('.precio');
+    var totalInput = newProductForm.querySelector('.total');
+
+    cantidadInput.addEventListener('input', function() {
+        calcularTotal(cantidadInput, precioInput, totalInput);
+    });
+
+    precioInput.addEventListener('input', function() {
+        calcularTotal(cantidadInput, precioInput, totalInput);
+    });
+});
+</script>
 {% endblock %}
