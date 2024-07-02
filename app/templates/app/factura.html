@@ -6,10 +6,28 @@
 {% block contenido %}
 <form method="POST" action="{% url 'factura' orden_id=orden.id_orden %}">
     {% csrf_token %}
-    <div class="container mt-3">
+    <div class="container mt-4">
         <h2>Detalles de la Orden</h2>
-        <p>Empresa: {{ orden.empresa }}</p>
-        <p>Dirección: {{ orden.direccion }}</p>
+        <div class="card p-3 my-3 text-center">
+            <table class="table table-borderless">
+                <thead>
+                  <tr>
+                    <th>Empresa</th>
+                    <th>Dirección</th>
+                    <th>Telefono</th>
+                    <th>Codigo Postal</th>
+                  </tr>
+                </thead>
+                <tbody class="border-top">
+                  <tr>
+                    <td>{{ orden.empresa }}</td>
+                    <td>{{ orden.direccion }}</td>
+                    <td>{{ orden.telefono }}</td>
+                    <td>{{ orden.codigo_postal }}</td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
         <div class="card p-3" id="product-card">
             <div id="product-forms">
                 <div class="row product-form mb-3">

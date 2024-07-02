@@ -1,0 +1,62 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block nombre %}Detalle Pedido{% endblock %}
+
+{% block contenido %}
+<div class="container mt-4">
+  {% for factura in listaFactura %}
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="card-title">Detalle de Factura - Código: {{ factura.id_factura }}</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h6 class="card-subtitle mb-2 text-muted">Información de la Empresa</h6>
+          <p><strong>Empresa:</strong> {{ factura.orden.empresa }}</p>
+          <p><strong>Dirección:</strong> {{ factura.orden.direccion }}</p>
+          <p><strong>Teléfono:</strong> {{ factura.orden.telefono }}</p>
+          <p><strong>Correo:</strong> {{ factura.orden.correo }}</p>
+          <p><strong>Código Postal:</strong> {{ factura.orden.codigo_postal }}</p>
+        </div>
+        <div class="col-md-6">
+          <h6 class="card-subtitle mb-2 text-muted">Totales</h6>
+          <p><strong>Subtotal:</strong> {{ factura.subtotal }}</p>
+          <p><strong>IVA:</strong> {{ factura.iva }}</p>
+          <p><strong>Total:</strong> {{ factura.total }}</p>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-12">
+          <h6 class="card-subtitle mb-2 text-muted">Productos</h6>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>Precio Unitario</th>
+                  <th>Precio Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for producto in productos %}
+                <tr>
+                  <td>{{ producto.producto }}</td>
+                  <td>{{ producto.cantidad }}</td>
+                  <td>{{ producto.precio_unitario }}</td>
+                  <td>{{ producto.precio_total }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

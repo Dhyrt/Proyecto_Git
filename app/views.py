@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, permission_required
@@ -90,8 +90,19 @@ def factura(request, orden_id):
                 )
 
         # Redirigir a la página de inicio (index)
-        return redirect('index')
+        return redirect('detalle_factura', id_factura=nueva_factura.id_factura)
     else:
         # Si no es una solicitud POST, obtener los datos de la orden y renderizar la plantilla de factura
         orden = Orden.objects.get(id_orden=orden_id)
         return render(request, 'app/factura.html', {'orden': orden})
+    
+def detalle_factura(request, id_factura):
+    
+    factura = Factura.objects.filter(id_factura=id_factura)
+    productos = ProductoFactura.objects.filter(factura=id_factura)
+
+    datos = {
+        'listaFactura': factura,
+        'productos': productos
+    }
+    return render(request, 'app/detalle_factura.html', datos)

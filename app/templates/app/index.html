@@ -114,55 +114,32 @@
         <h2>Tus pedidos</h2>
         {% if user.is_authenticated %}
         <div class="container mb-5">
+            <table class="table table-hover">
+            <thead>
+                <th>Codigo</th>
+                <th>Estado Factura</th>
+                <th>Estado Orden</th>
+                <th>Empresa</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th></th>
+                <th></th>
+            </thead>
+            <tbody>
             {% for factura in facturas %}
-            <div class="row justify-content-center py-3">
-                <div class="card grid-0">
-                    <div class="d-flex justify-content-between px-3 top">
-                        <div class="mt-3">
-                            <h5>FACTURA <span class="text-primary font-weight-bold">#{{ factura.id_factura }}</span></h5>
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="col-12">
-                            <div class="progress">
-                                <!-- Ajusta el porcentaje de la barra de progreso según el estado del pedido -->
-                                {% if factura.estado.estado == 'Procesando' %}
-                                    <div class="progress-bar" style="width:25%"></div>
-                                {% elif factura.estado.estado == 'Preparando' %}
-                                    <div class="progress-bar" style="width:50%"></div>
-                                {% elif factura.estado.estado == 'En Camino' %}
-                                    <div class="progress-bar" style="width:75%"></div>
-                                {% elif factura.estado.estado == 'Entregado' %}
-                                    <div class="progress-bar" style="width:100%"></div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="d-flex justify-content-between text-center">
-                                <div> 
-                                    <img src="{% static 'app/img/order.png' %}" style="height: 70px; width: 70px;">
-                                    <p>Procesando</p>
-                                </div>
-                                <div> 
-                                    <img src="{% static 'app/img/order2.png' %}" style="height: 70px; width: 70px;">
-                                    <p>Preparando</p>
-                                </div>
-                                <div> 
-                                    <img src="{% static 'app/img/order3.png' %}" style="height: 70px; width: 70px;">
-                                    <p>En Camino</p>
-                                </div>
-                                <div> 
-                                    <img src="{% static 'app/img/order4.png' %}" style="height: 70px; width: 70px;">
-                                    <p>Entregado</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <tr>
+                <td>#{{ factura.id_factura }}</td>
+                <td>{{ factura.estado }}</td>
+                <td>{{ factura.estado_entrega }}</td>
+                <td>{{ factura.orden.empresa }}</td>
+                <td>{{ factura.orden.direccion }}</td>
+                <td>{{ factura.orden.telefono }}</td>
+                <td><a href="{% url 'detalle_factura' factura.id_factura %}" class="nav-link">Detalles</a></td>
+                <td><button class="btn btn-clear">Modificar</button></td>
+            </tr>
             {% endfor %}
+            </tbody>
+        </table>
         </div>
         
         {% else %}
