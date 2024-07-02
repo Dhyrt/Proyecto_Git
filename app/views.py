@@ -64,13 +64,15 @@ def factura(request, orden_id):
         iva = round(subtotal * 0.19, 2)
         total = round(subtotal + iva, 2)
 
-        # Obtener el estado 'Procesando' desde la base de datos
-        estado_procesando = Estado.objects.get(estado='Procesando')
+        # Obtener el estado 'Creada' y 'Por entregar' desde la base de datos
+        estado_fact = Estado.objects.get(estado='Creada')
+        estado_entrega = EstadoEntrega.objects.get(estado_entrega='Por entregar')
 
         # Crear la nueva factura
         nueva_factura = Factura.objects.create(
             orden=orden,
-            estado=estado_procesando,
+            estado=estado_fact,
+            estado_entrega=estado_entrega,
             subtotal=subtotal,
             iva=iva,
             total=total
