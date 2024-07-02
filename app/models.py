@@ -17,6 +17,16 @@ class Orden(models.Model):
     class Meta:
         db_table = 'db_orden'
 
+opciones_estadoentrega = [
+    [0, "Por entregar"],
+    [1, "Entregado"],
+    [2, "Rechazado"],
+]
+opciones_estado = [
+    [0, "Creada"],
+    [1, "Rectificada"],
+]
+
 class Estado(models.Model):
     id_estado = models.AutoField(primary_key=True)
     estado = models.CharField(max_length=25)
@@ -27,10 +37,21 @@ class Estado(models.Model):
     class Meta:
         db_table = 'db_estado'
 
+class EstadoEntrega(models.Model):
+    id_estado = models.AutoField(primary_key=True)
+    estado_entrega = models.CharField(max_length=25)
+
+    def __str__(self):
+        return self.estado
+    
+    class Meta:
+        db_table = 'db_estado_entrega'
+
 class Factura(models.Model):
     id_factura = models.CharField(max_length=10, primary_key=True, editable=False)
     orden = models.ForeignKey(Orden, on_delete=models.CASCADE)
-    estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
+    estado = models.ForeignKey(Estado, on_delete=models.CASCADE, choices=opciones_estado)
+    estado_entrega = models.ForeignKey(EstadoEntrega, on_delete=models.CASCADE, choices=opciones_estadoentrega)
     subtotal = models.IntegerField()
     iva = models.IntegerField()
     total = models.IntegerField()
