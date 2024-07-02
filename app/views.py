@@ -1,7 +1,10 @@
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required, permission_required
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from xhtml2pdf import pisa
+from bs4 import BeautifulSoup
+from django.template.loader import get_template
 from .forms import *
 from .models import *
 
@@ -106,4 +109,22 @@ def detalle_factura(request, id_factura):
         'listaFactura': factura,
         'productos': productos
     }
+    if request.GET.get('download') == 'pdf':
+        template = get_template('app/detalle_factura.html')
+        html = template.render(datos)
+
+        # Usar BeautifulSoup para extraer solo el contenido deseado
+        soup = BeautifulSoup(html, 'html.parser')
+        pdf_content = soup.find(class_='pdf-content')
+        html = str(pdf_content)  # Convertir de nuevo a string
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="detalle_factura_{}.pdf"'.format(id_factura)
+
+        pisa_status = pisa.CreatePDF(html, dest=response)
+
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+
+        return response
     return render(request, 'app/detalle_factura.html', datos)

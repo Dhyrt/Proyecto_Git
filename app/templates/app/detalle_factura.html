@@ -6,7 +6,7 @@
 {% block contenido %}
 <div class="container mt-4">
   {% for factura in listaFactura %}
-  <div class="card mb-4">
+  <div class="card mb-4 pdf-content">
     <div class="card-header">
       <h5 class="card-title">Detalle de Factura - Código: {{ factura.id_factura }}</h5>
     </div>
@@ -57,6 +57,7 @@
       </div>
     </div>
   </div>
+  <a href="{% url 'detalle_factura' id_factura=factura.id_factura %}?download=pdf" class="btn btn-primary mb-4">Descargar PDF</a>
   {% endfor %}
 </div>
 {% endblock %}
