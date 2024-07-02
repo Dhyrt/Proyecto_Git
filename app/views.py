@@ -95,7 +95,8 @@ def factura(request, orden_id):
         # Si no es una solicitud POST, obtener los datos de la orden y renderizar la plantilla de factura
         orden = Orden.objects.get(id_orden=orden_id)
         return render(request, 'app/factura.html', {'orden': orden})
-    
+
+@login_required    
 def detalle_factura(request, id_factura):
     
     factura = Factura.objects.filter(id_factura=id_factura)
