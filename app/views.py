@@ -11,9 +11,11 @@ from .models import *
 # Create your views here.
 
 def index(request):
-    facturas = Factura.objects.all()
-    
-    # Pasar las facturas al contexto del renderizado del template
+    query = request.GET.get('q')
+    if query:
+        facturas = Factura.objects.filter(id_factura__icontains=query)
+    else:
+        facturas = Factura.objects.all()
     return render(request, 'app/index.html', {'facturas': facturas})
 
 def registro(request): 
