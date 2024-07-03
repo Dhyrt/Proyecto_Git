@@ -48,26 +48,22 @@ Django es un framework de desarrollo web robusto y escalable que permite una rá
 
 1. Clonar el repositorio:
    ```
-   git clone https://github.com/usuario/healquest-labs.git
+   git clone https://github.com/Dhyrt/Proyecto_Git.git
    ```
 2. **Navegar al directorio del proyecto:**
    ```
-   cd healquest-labs
+   cd Proyecto_Git
    ```
-3. Crear un entorno virtual:
-   ```
-   python -m venv venv
-   ```
-4. Instalar las dependencias:
+3. Instalar las dependencias:
    ```
    pip install -r requirements.txt
    ```
-5. Realizar migraciones de la base de datos:
+4. Realizar migraciones de la base de datos:
    ```
    python manage.py migrate
    ```
-6. Ejecutar el servidor de desarrollo:
+5. Ejecutar el servidor de desarrollo:
    ```
    python manage.py runserver
    ```
-7. Abrir un navegador web y navegar a http://127.0.0.1:8000 para ver la aplicación en funcionamiento.
+6. Abrir un navegador web y navegar a http://127.0.0.1:8000 para ver la aplicación en funcionamiento.
