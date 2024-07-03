@@ -145,7 +145,7 @@
                 <td class="py-3">{{ factura.orden.direccion }}</td>
                 <td class="py-3">{{ factura.orden.telefono }}</td>
                 <td class="py-3"><a href="{% url 'detalle_factura' factura.id_factura %}" class="nav-link">Detalles</a></td>
-                <td class="py-3"><a href="#" class="nav-link">Modificar</a></td>
+                <td class="py-3"><a href="{% url 'modificar' factura.id_factura %}" class="nav-link">Modificar</a></td>
             </tr>
             {% endfor %}
             </tbody>
