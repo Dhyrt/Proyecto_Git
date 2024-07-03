@@ -126,26 +126,26 @@
         <div class="container mb-5">
             <table class="table table-hover">
             <thead>
-                <th>Codigo</th>
-                <th>Estado Factura</th>
-                <th>Estado Orden</th>
-                <th>Empresa</th>
-                <th>Direccion</th>
-                <th>Telefono</th>
-                <th></th>
-                <th></th>
+                <th class="py-3">Codigo</th>
+                <th class="py-3">Estado Factura</th>
+                <th class="py-3">Estado Orden</th>
+                <th class="py-3">Empresa</th>
+                <th class="py-3">Direccion</th>
+                <th class="py-3">Telefono</th>
+                <th class="py-3"></th>
+                <th class="py-3"></th>
             </thead>
             <tbody>
             {% for factura in facturas %}
             <tr>
-                <td>#{{ factura.id_factura }}</td>
-                <td>{{ factura.estado }}</td>
-                <td>{{ factura.estado_entrega }}</td>
-                <td>{{ factura.orden.empresa }}</td>
-                <td>{{ factura.orden.direccion }}</td>
-                <td>{{ factura.orden.telefono }}</td>
-                <td><a href="{% url 'detalle_factura' factura.id_factura %}" class="nav-link">Detalles</a></td>
-                <td><button class="btn btn-clear">Modificar</button></td>
+                <td class="py-3">#{{ factura.id_factura }}</td>
+                <td class="py-3">{{ factura.estado }}</td>
+                <td class="py-3">{{ factura.estado_entrega }}</td>
+                <td class="py-3">{{ factura.orden.empresa }}</td>
+                <td class="py-3">{{ factura.orden.direccion }}</td>
+                <td class="py-3">{{ factura.orden.telefono }}</td>
+                <td class="py-3"><a href="{% url 'detalle_factura' factura.id_factura %}" class="nav-link">Detalles</a></td>
+                <td class="py-3"><a href="#" class="nav-link">Modificar</a></td>
             </tr>
             {% endfor %}
             </tbody>
@@ -185,7 +185,7 @@
         <h3 class="mb-4">Noticias del Sector</h3>
         <div class="col-lg-3 mb-4">
             <div class="card">
-                <img src="{% static 'app/img/inyeccion.jpg' %}" class="card-img-top" alt="Imagen artículo 1" style="height: 200px; width: 297px;">
+                <img src="{% static 'app/img/inyeccion.jpg' %}" class="card-img-top" alt="Imagen artículo 1" style="height: 200px; width: 299,5px;">
                 <div class="card-body">
                     <h5 class="card-title"><a href="https://www.elmundo.es/internacional/2020/04/24/5ea291adfc6c8309298b45ae.html" target="_blank" style="color: #000;">Una inyección de lejía cura todos los males</a></h5>
                     <p class="card-text">El coronavirus podría tratarse con inyecciones de desinfectante en el cuerpo.</p>
@@ -195,7 +195,7 @@
 
         <div class="col-lg-3 mb-4">
             <div class="card">
-                <img src="{% static 'app/img/sal.jpg' %}" class="card-img-top" alt="Imagen artículo 4" style="height: 200px; width: 297px;">
+                <img src="{% static 'app/img/sal.jpg' %}" class="card-img-top" alt="Imagen artículo 4" style="height: 200px; width: 299,5px;">
                 <div class="card-body">
                     <h5 class="card-title"><a href="https://www.elmundotoday.com/2024/02/un-anciano-con-sed-de-venganza-decide-sacarse-medicina-para-acabar-ejerciendo-y-prohibirle-la-sal-al-medico-que-se-la-prohibio-a-el/" target="_blank" style="color: #000;">Un anciano vengativo estudia Medicina para prohibir sal al médico que se la negó</a></h5>
                     <p class="card-text">"Me ha arruinado la vida, pero me voy a vengar", promete mientras repasa sus apuntes de histología médica.</p>
@@ -205,7 +205,7 @@
 
         <div class="col-lg-3 mb-4">
             <div class="card">
-                <img src="{% static 'app/img/orangutan.jpg' %}" class="card-img-top" alt="Imagen artículo 2" style="height: 200px; width: 297px;">
+                <img src="{% static 'app/img/orangutan.jpg' %}" class="card-img-top" alt="Imagen artículo 2" style="height: 200px; width: 299,5px;">
                 <div class="card-body">
                     <h5 class="card-title"><a href="https://www.elmundotoday.com/2024/05/sanidad-ya-ha-contactado-con-el-orangutan-que-aprendio-a-curarse-una-herida-a-solas-para-que-atienda-a-pacientes-espanoles/" target="_blank" style="color: #000;">Sanidad contacta con orangután autónomo para tratar pacientes españoles</a></h5>
                     <p class="card-text">El Ministerio de Sanidad cree que Rakus podría atender a pacientes españoles en aquellas comunidades autónomas con las urgencias más saturadas.</p>
@@ -214,7 +214,7 @@
         </div>
         <div class="col-lg-3 mb-4">
             <div class="card">
-                <img src="{% static 'app/img/neandertal.jpg' %}" class="card-img-top" alt="Imagen artículo 3" style="height: 200px; width: 297px;">
+                <img src="{% static 'app/img/neandertal.jpg' %}" class="card-img-top" alt="Imagen artículo 3" style="height: 200px; width: 299,5px;">
                 <div class="card-body">
                     <h5 class="card-title"><a href="https://www.elmundotoday.com/2022/10/nobel-de-medicina-para-el-hombre-que-descifro-el-adn-de-los-neandertales-con-muestras-de-saliva-de-su-cunado-alfonso/" target="_blank" style="color: #000;">Nobel de Medicina para el descifrador del ADN neandertal con saliva de su cuñado</a></h5>
                     <p class="card-text">Rescató el ADN de su cuñado Alfonso aprovechando una muestra de saliva en un vaso de vino que acabó resultando esencial para conocer el genoma de especies extintas.</p>

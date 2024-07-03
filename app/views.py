@@ -130,3 +130,7 @@ def detalle_factura(request, id_factura):
 
         return response
     return render(request, 'app/detalle_factura.html', datos)
+
+def modificar(request):
+    
+    return render(request, 'app/modificar.html')

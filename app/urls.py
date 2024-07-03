@@ -8,4 +8,5 @@ urlpatterns = [
     path('factura/', factura, name="factura"),
     path('factura/<int:orden_id>/', factura, name="factura"),
     path('detalle_factura/<id_factura>/', detalle_factura, name="detalle_factura"),
+    path('modificar', modificar, name ="modificar"),
 ]
