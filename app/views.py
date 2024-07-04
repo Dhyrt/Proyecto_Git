@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -131,6 +131,80 @@ def detalle_factura(request, id_factura):
         return response
     return render(request, 'app/detalle_factura.html', datos)
 
-def modificar(request):
-    
-    return render(request, 'app/modificar.html')
+def modificar(request, id_factura):
+    estados_entrega = EstadoEntrega.objects.all()
+    if id_factura:
+        factura = get_object_or_404(Factura, id_factura=id_factura)
+        orden = factura.orden
+        productos = ProductoFactura.objects.filter(factura=factura)
+    else:
+        factura = None
+        orden = None
+        productos = []
+    datos = {
+        'listaFactura': factura,
+        'listaOrden': [orden] if orden else [],
+        'productos': productos,
+        'estados_entrega': estados_entrega
+    }
+
+    if request.method == 'POST':
+        nombre_cliente = request.POST.get('nombreCliente')
+        direccion = request.POST.get('direccion')
+        telefono = request.POST.get('telefono')
+        correo = request.POST.get('correo')
+        codigo_postal = request.POST.get('codigoPostal')
+
+        if orden:
+            orden.empresa = nombre_cliente
+            orden.direccion = direccion
+            orden.telefono = telefono
+            orden.correo = correo
+            orden.codigo_postal = int(codigo_postal)
+            orden.save()
+
+        productos = request.POST.getlist('producto')
+        cantidades = request.POST.getlist('cantidad')
+        precios = request.POST.getlist('precio')
+        subtotales = request.POST.getlist('total')
+
+        subtotales = [subtotal.strip() for subtotal in subtotales if subtotal.strip()]
+        subtotal = round(sum(int(subtotal) for subtotal in subtotales), 2)
+        iva = round(subtotal * 0.19, 2)
+        total = round(subtotal + iva, 2)
+
+        estado_fact = Estado.objects.get(estado='Rectificada')
+        estado_entrega_id = request.POST.get('estadoEntrega')
+        estado_entrega = get_object_or_404(EstadoEntrega, id_estado_entrega=estado_entrega_id)
+
+        if factura:
+            factura.orden = orden
+            factura.subtotal = subtotal
+            factura.iva = iva
+            factura.total = total
+            factura.estado = estado_fact
+            factura.estado_entrega = estado_entrega
+            factura.save()
+            ProductoFactura.objects.filter(factura=factura).delete()
+        else:
+            factura = Factura.objects.create(
+                orden=orden,
+                estado=estado_fact,
+                estado_entrega=estado_entrega,
+                subtotal=subtotal,
+                iva=iva,
+                total=total
+            )
+
+        for producto, cantidad, precio, subtotal in zip(productos, cantidades, precios, subtotales):
+            if subtotal.strip():
+                ProductoFactura.objects.create(
+                    factura=factura,
+                    producto=producto,
+                    cantidad=int(cantidad),
+                    precio_unitario=int(precio),
+                    precio_total=int(subtotal)
+                )
+
+        return redirect('detalle_factura', id_factura=factura.id_factura)
+    return render(request, 'app/modificar.html', datos)

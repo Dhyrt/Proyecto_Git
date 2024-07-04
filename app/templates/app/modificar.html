@@ -4,4 +4,253 @@
 {% block nombre %} Modificar orden {% endblock %}
     
 {% block contenido %}
+<div class="container mt-4">
+    <h2>Modificar factura</h2>
+    <form method="POST" action="">
+    {% csrf_token %}
+    <div class="d-flex mb-3">
+        <div class="form-group col-md-2">
+            <label for="estadoEntrega">Estado de la orden</label>
+            <select class="form-control" id="estadoEntrega" name="estadoEntrega" onchange="toggleTextInput()">
+                {% for estado in estados_entrega %}
+                <option value="{{ estado.id_estado_entrega }}">{{ estado.estado_entrega }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div style="display: none;"  id="rechazoMotivo">
+        <div class="d-flex mb-3">
+            <div class="form-group col-md-4">
+                <label for="motivoRechazo">Motivo de rechazo</label>
+                <input type="text" class="form-control" id="motivoRechazo" name="motivoRechazo" placeholder="Especifique el motivo de rechazo">
+            </div>
+        </div>
+    </div>
+    <div style="display: none;"  id="entregaRecibida">
+        <div class="d-flex row mb-3">
+            <div class="form-group col-md-6">
+                <label for="direccionEntrega">Direccion entrega</label>
+                <input type="text" class="form-control" id="direccionEntrega" name="direccionEntrega" placeholder="Especifique la direccion de la entrega">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="rutReceptor">Rut receptor de la orden</label>
+                <input type="text" class="form-control" id="rutReceptor" name="rutReceptor" placeholder="Especifique el rut de quien recibio la entrega">
+            </div>
+        </div>
+    </div>
+        <div class="card px-4 py-3 mb-3">
+            <div class="mb-4">
+                <h4>Datos Cliente</h4>
+            </div>
+                <div class="card-body">
+                    <div class="d-flex">
+                        {% for orden in listaOrden %}
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="nombreCliente">Nombre Cliente/Empresa</label>
+                                <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" value="{{ orden.empresa }}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="direccion">Dirección</label>
+                                <input type="text" class="form-control" id="direccion" name="direccion" value="{{ orden.direccion }}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="telefono">Teléfono</label>
+                                <input type="tel" class="form-control" id="telefono" name="telefono" value="{{ orden.telefono }}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="correo">Correo</label>
+                                <input type="email" class="form-control" id="correo" name="correo" value="{{ orden.correo }}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="codigoPostal">Código Postal</label>
+                                <input type="text" class="form-control" id="codigoPostal" name="codigoPostal" value="{{ orden.codigo_postal }}" required>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        <div class="card p-4 mb-3" id="product-card">
+            <div class="mb-4">
+                <h4>Productos</h4>
+            </div>
+            <div id="product-forms">
+                {% for producto in productos %}
+                <div class="row product-form mb-3">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="producto">Producto</label>
+                            <input type="text" class="form-control" name="producto" placeholder="Nombre del producto" value="{{ producto.producto }}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="cantidad">Cantidad</label>
+                            <input type="number" class="form-control cantidad" name="cantidad" placeholder="Cantidad" value="{{ producto.cantidad }}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="precio">Precio</label>
+                            <input type="text" class="form-control precio" name="precio" placeholder="Precio" value="{{ producto.precio_unitario }}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="total">Total</label>
+                            <input type="text" class="form-control total" name="total" placeholder="Total" value="{{ producto.precio_total }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="justify-content-start">
+                <button type="button" class="btn btn-clear text-primary" id="add-product"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+        <div class="card mb-3 p-3">
+            <h5 class="card-title">Finalizar pedido</h5>
+            <div class="card-body">
+                <p class="card-text">Subtotal: <span id="subtotal">0</span></p>
+                <p class="card-text">Iva: <span id="iva">0</span></p>
+                <h6>Total: <span id="total">0</span></h6>
+                <button type="submit" class="btn btn-success" id="finalizar-pedido">Finalizar pedido</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    function toggleTextInput() {
+        var estadoEntregaSelect = document.getElementById("estadoEntrega");
+        var entregaRecDiv = document.getElementById("entregaRecibida");
+        var motivoRechazoDiv = document.getElementById("rechazoMotivo");
+        var selectedOptionText = estadoEntregaSelect.options[estadoEntregaSelect.selectedIndex].text;
+
+        if (selectedOptionText.trim().toLowerCase() === "rechazado") {
+            motivoRechazoDiv.style.display = "block";
+            entregaRecDiv.style.display = "none";
+        } else if (selectedOptionText.trim().toLowerCase() === "entregado") {
+            entregaRecDiv.style.display = "block";
+            motivoRechazoDiv.style.display = "none";
+        } else {
+            motivoRechazoDiv.style.display = "none";
+            entregaRecDiv.style.display = "none";
+        }
+    }
+
+    // Call the function on page load to set the initial state
+    window.onload = function() {
+        toggleTextInput();
+    };
+</script>
+
+<script>
+// Función para calcular los totales
+function calcularTotales() {
+    var subTotal = 0;
+    var iva = 0;
+    
+    // Iterar sobre los campos de total para sumarlos
+    var totalInputs = document.querySelectorAll('.total');
+    totalInputs.forEach(function(input) {
+        subTotal += parseInt(input.value) || 0;
+    });
+    
+    // Calcular IVA
+    iva = subTotal * 0.19; // Suponiendo 19% de IVA
+    
+    // Actualizar valores mostrados
+    document.getElementById('subtotal').innerText = subTotal;
+    document.getElementById('iva').innerText = iva;
+    document.getElementById('total').innerText = subTotal + iva;
+}
+
+// Función para calcular el total de un conjunto de campos
+function calcularTotal(cantidadInput, precioInput, totalInput) {
+    var cantidad = cantidadInput.value;
+    var precio = precioInput.value;
+    
+    // Calcula el precio total
+    var precioTotal = cantidad * precio;
+    
+    // Actualiza el campo de precio total
+    totalInput.value = precioTotal;
+
+    // Calcular totales
+    calcularTotales();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Calcular totales inicialmente
+    calcularTotales();
+
+    // Evento de escucha para campos de cantidad y precio
+    document.querySelectorAll('.product-form').forEach(function(form) {
+        var cantidadInput = form.querySelector('.cantidad');
+        var precioInput = form.querySelector('.precio');
+        var totalInput = form.querySelector('.total');
+
+        cantidadInput.addEventListener('input', function() {
+            calcularTotal(cantidadInput, precioInput, totalInput);
+        });
+
+        precioInput.addEventListener('input', function() {
+            calcularTotal(cantidadInput, precioInput, totalInput);
+        });
+    });
+});
+
+document.getElementById('add-product').addEventListener('click', function() {
+    // Selecciona el primer conjunto de campos
+    var productForm = document.querySelector('.product-form');
+    
+    // Clona el conjunto de campos
+    var newProductForm = productForm.cloneNode(true);
+    
+    // Agrega un identificador único a los campos del nuevo conjunto
+    newProductForm.querySelectorAll('input').forEach(function(input) {
+        input.id = input.id + '-' + document.querySelectorAll('.product-form').length;
+    });
+    
+    // Limpia los valores de los campos del nuevo conjunto
+    var inputs = newProductForm.getElementsByTagName('input');
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].value = '';
+    }
+    
+    // Añade el botón de eliminar al nuevo conjunto de campos
+    var removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.className = 'btn btn-clear text-danger remove-product';
+    removeButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
+    removeButton.addEventListener('click', function() {
+        newProductForm.remove();
+        calcularTotales();
+    });
+    
+    // Añade el botón al nuevo conjunto de campos
+    var col = document.createElement('div');
+    col.className = 'col-md-auto d-flex align-items-end';
+    col.appendChild(removeButton);
+    newProductForm.appendChild(col);
+    
+    // Añade el nuevo conjunto de campos al contenedor dentro de la misma card
+    document.getElementById('product-forms').appendChild(newProductForm);
+    
+    // Agrega eventos de escucha para campos de cantidad y precio en el nuevo conjunto de campos
+    var cantidadInput = newProductForm.querySelector('.cantidad');
+    var precioInput = newProductForm.querySelector('.precio');
+    var totalInput = newProductForm.querySelector('.total');
+
+    cantidadInput.addEventListener('input', function() {
+        calcularTotal(cantidadInput, precioInput, totalInput);
+    });
+
+    precioInput.addEventListener('input', function() {
+        calcularTotal(cantidadInput, precioInput, totalInput);
+    });
+});
+</script>
 {% endblock %}
