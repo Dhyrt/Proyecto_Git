@@ -6,7 +6,7 @@
 {% block contenido %}
 <div class="container mt-4">
     <h2>Modificar factura</h2>
-    <form method="POST" action="">
+    <form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="d-flex mb-3">
         <div class="form-group col-md-2">
@@ -36,6 +36,11 @@
                 <label for="rutReceptor">Rut receptor de la orden</label>
                 <input type="text" class="form-control" id="rutReceptor" name="rutReceptor" placeholder="Especifique el rut de quien recibio la entrega">
             </div>
+            <div class="form-group col-md-6">
+                <label for="imagenReceptor">Imagen recepción de la orden</label>
+                <input type="file" class="form-control" id="imagenReceptor" name="imagenReceptor" accept="image/*">
+            </div>
+            
         </div>
     </div>
         <div class="card px-4 py-3 mb-3">
