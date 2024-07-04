@@ -141,6 +141,7 @@ def modificar(request, id_factura):
         factura = None
         orden = None
         productos = []
+
     datos = {
         'listaFactura': factura,
         'listaOrden': [orden] if orden else [],
@@ -205,6 +206,32 @@ def modificar(request, id_factura):
                     precio_unitario=int(precio),
                     precio_total=int(subtotal)
                 )
+        if estado_entrega.estado_entrega == 'Rechazado':
+            motivo_rechazo = request.POST.get('motivoRechazo')
+
+            historial_rechazo = HistorialRechazo(
+                factura=factura,
+                descripcion=motivo_rechazo
+            )
+            historial_rechazo.save()
+
+
+        if estado_entrega.estado_entrega == 'Entregado':
+            direccion_acept = request.POST.get('direccionEntrega')
+            rut_acept = request.POST.get('rutReceptor')
+            imagen_receptor = request.FILES.get('imagenReceptor')
+
+            aceptacion = Aceptacion(
+                factura=factura,
+                direccionAcept=direccion_acept,
+                rutAcept=rut_acept,
+            )
+
+            if imagen_receptor:
+                aceptacion.img = imagen_receptor
+
+            aceptacion.save()
 
         return redirect('detalle_factura', id_factura=factura.id_factura)
+    
     return render(request, 'app/modificar.html', datos)
