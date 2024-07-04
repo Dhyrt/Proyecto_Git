@@ -106,10 +106,13 @@ def detalle_factura(request, id_factura):
     
     factura = Factura.objects.filter(id_factura=id_factura)
     productos = ProductoFactura.objects.filter(factura=id_factura)
-
+    rechazos = HistorialRechazo.objects.filter(factura=id_factura)
+    aceptacion = Aceptacion.objects.filter(factura=id_factura)
     datos = {
         'listaFactura': factura,
-        'productos': productos
+        'productos': productos,
+        'rechazos': rechazos,
+        'aceptacion': aceptacion
     }
     if request.GET.get('download') == 'pdf':
         template = get_template('app/detalle_factura.html')

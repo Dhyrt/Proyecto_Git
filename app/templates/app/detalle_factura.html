@@ -57,7 +57,65 @@
       </div>
     </div>
   </div>
-  <a href="{% url 'detalle_factura' id_factura=factura.id_factura %}?download=pdf" class="btn btn-primary mb-4">Descargar PDF</a>
+
+  {% if aceptacion %}
+  <div class="container mt-4">
+    <h5 class="mb-3">Recepción del pedido</h5>
+    <div class="d-flex row">
+      {% for aceptacion in aceptacion %}
+      <div class="col-md-4">
+        <p><strong>Rut receptor:</strong></p>
+      </div>
+      <div class="col-md-8">
+        <p>{{ aceptacion.rutAcept }}</p>
+      </div>
+      <div class="col-md-4">
+        <p><strong>Dirección:</strong></p>
+      </div>
+      <div class="col-md-8">
+        <p>{{ aceptacion.direccionAcept }}</p>
+      </div>
+      <div class="col-md-4">
+        <p><strong>Imagen de la entrega:</strong></p>
+      </div>
+      <div class="col-md-8">
+        <img src="{{ aceptacion.img.url }}" alt="Imagen de la entrega" style="width: 200px; height: auto;">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if rechazos %}
+  <div class="container my-3">
+    <h5 class="mb-3">Historial de rechazos</h5>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Razón del rechazo</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rechazo in rechazos %}
+          <tr>
+            <td>{{ rechazo.fecha }}</td>
+            <td>{{ rechazo.descripcion }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+  <div class="d-flex justify-content-between mb-4">
+    <div>
+        <a href="{% url 'detalle_factura' id_factura=factura.id_factura %}?download=pdf" class="btn btn-success">Descargar PDF</a>
+        <a href="{% url 'modificar' factura.id_factura %}" class="btn btn-primary mx-2">Modificar</a>
+    </div>
+    <a href="{% url 'index' %}" class="btn btn-primary ml-auto">Volver al inicio</a>
+</div>
   {% endfor %}
 </div>
 {% endblock %}
