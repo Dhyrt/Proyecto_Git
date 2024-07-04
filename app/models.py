@@ -83,12 +83,38 @@ class ProductoFactura(models.Model):
     class Meta:
         db_table = 'db_producto_factura'
 
+class HistorialRechazo(models.Model):
+    id_historial = models.AutoField(primary_key=True)
+    factura = models.ForeignKey(Factura, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+    descripcion = models.CharField(max_length=500)
+
+    def __str__(self):
+        return str(self.id_historial)
+
+    class Meta:
+        db_table = 'db_historial'
+
+class Aceptacion(models.Model): 
+    id_aceptacion = models.AutoField(primary_key=True)
+    factura = models.ForeignKey(Factura, on_delete=models.CASCADE)
+    img = models.ImageField(upload_to='aceptacion', null=True)
+    direccionAcept = models.CharField(max_length=500)
+    rutAcept = models.CharField(max_length=500)
+
+    def __str__(self):
+        return str(self.id_aceptacion)
+
+    class Meta:
+        db_table = 'db_aceptacion'
+
 def create_initial_estados(sender, **kwargs):
     Estado.objects.get_or_create(estado='Creada')
     Estado.objects.get_or_create(estado='Rectificada')
     EstadoEntrega.objects.get_or_create(estado_entrega='Por entregar')
     EstadoEntrega.objects.get_or_create(estado_entrega='Entregado')
     EstadoEntrega.objects.get_or_create(estado_entrega='Rechazado')
+
 @receiver(post_migrate)
 def create_initial_data(sender, **kwargs):
     create_initial_estados(sender, **kwargs)
