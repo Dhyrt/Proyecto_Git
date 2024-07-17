@@ -133,9 +133,9 @@
     </div>
     <div class="d-flex justify-content-between grid gap-2">
       {% if factura.estado.estado != 'Anulada' and factura.estado_entrega.estado_entrega != 'Entregado' %}
-      <form method="post">
+      <form method="post" class="anular-factura-form" data-id="{{ factura.id_factura }}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Anular Factura</button>
+        <button type="button" class="btn btn-danger anular-factura-btn">Anular Factura</button>
       </form>
       {% endif %}
       <a href="{% url 'index' %}" class="btn btn-primary">Volver al inicio</a>
@@ -143,4 +143,32 @@
 </div>
   {% endfor %}
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.anular-factura-btn').forEach(function(button) {
+      button.addEventListener('click', function() {
+        var form = this.closest('form');
+        var facturaId = form.dataset.id;
+
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: "No podrás revertir esta acción",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, anular',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            form.submit();
+          }
+        });
+      });
+    });
+  });
+</script>
+
 {% endblock %}
