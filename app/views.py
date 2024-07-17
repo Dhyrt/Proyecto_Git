@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.db.models import Count, Q
 from xhtml2pdf import pisa
 from bs4 import BeautifulSoup
 from django.template.loader import get_template
@@ -20,7 +21,19 @@ def index(request):
         facturas = Factura.objects.filter(id_factura__icontains=query)
     else:
         facturas = Factura.objects.all()
-    return render(request, 'app/index.html', {'facturas': facturas})
+    # Contar las facturas según el estado
+    total_anuladas = facturas.filter(estado__estado='Anulada').count()
+    por_entregar = facturas.filter(Q(estado_entrega__estado_entrega='Por entregar') & ~Q(estado__estado='Anulada')).count()
+    entregado = facturas.filter(Q(estado_entrega__estado_entrega='Entregado') & ~Q(estado__estado='Anulada')).count()
+    rechazado = facturas.filter(Q(estado_entrega__estado_entrega='Rechazado') & ~Q(estado__estado='Anulada')).count()
+    datos = {
+        'facturas': facturas,
+        'total_anuladas': total_anuladas,
+        'por_entregar': por_entregar,
+        'entregado': entregado,
+        'rechazado': rechazado
+    }
+    return render(request, 'app/index.html', datos)
 
 def registro(request): 
     if request.method == 'POST':

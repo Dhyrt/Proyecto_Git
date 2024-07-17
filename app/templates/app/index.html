@@ -113,15 +113,21 @@
     <div class="container mt-4 mb-5">
         <h2>Tus pedidos</h2>
         {% if user.is_authenticated %}
-        <div class="d-flex justify-content-end">
+        <div class="d-flex mt-4">
+            <div class="row col-md-9">
+                <div class="col-md-3"><p><strong>Por entregar:</strong> {{ por_entregar }}</p></div>
+                <div class="col-md-3"><p><strong>Entregado:</strong> {{ entregado }}</p></div>
+                <div class="col-md-3"><p><strong>Rechazado:</strong> {{ rechazado }}</p></div>
+                <div class="col-md-3"><p><strong>Anuladas:</strong> {{ total_anuladas }}</p></div>
+            </div>
             <form method="get" action="">
                 <div class="input-group mb-3">
-                  <input type="text" name="q" class="form-control" placeholder="Buscar por ID de Factura" value="{{ request.GET.q }}">
-                  <div class="input-group-append">
+                    <input type="text" name="q" class="form-control" placeholder="Buscar por ID de Factura" value="{{ request.GET.q }}">
+                    <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="submit">Buscar</button>
-                  </div>
+                    </div>
                 </div>
-              </form>
+            </form>
         </div>
         <div class="container mb-5">
             {% if facturas %}
