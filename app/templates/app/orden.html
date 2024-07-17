@@ -10,7 +10,7 @@
             <h2>Realizar Orden</h2>
         </div>
         <div class="card-body">
-            <form method="POST" action="{% if nueva_orden %}{% url 'factura' orden_id=nueva_orden.id %}{% endif %}">
+            <form method="POST" action="{% if nueva_orden %}{% url 'factura' orden_id=nueva_orden.id %}{% endif %}" onsubmit="return verificarRut()">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-md-6">
@@ -49,10 +49,7 @@
                         <div class="form-group">
                             <label for="rutVendedor">RUT Vendedor</label>
                             <input type="text" class="form-control" id="rutVendedor" name="rutVendedor" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="direccionVendedor">Dirección Vendedor</label>
-                            <input type="text" class="form-control" id="direccionVendedor" name="direccionVendedor" required>
+                            <small id="rutError" class="form-text text-danger" style="display: none;">RUT inválido. Por favor, ingrese un RUT válido.</small>
                         </div>
                         <div class="form-group">
                             <label for="telefonoVendedor">Teléfono Vendedor</label>
@@ -71,4 +68,73 @@
         </div>
     </div>
 </div>
+
+<script>
+    function verificarRut() {
+        let rutVendedor = document.getElementById('rutVendedor').value;
+        const rutError = document.getElementById('rutError');
+
+        rutVendedor = formatearRut(rutVendedor);
+
+        if (validarRut(rutVendedor)) {
+            rutError.style.display = 'none';
+            document.getElementById('rutVendedor').value = rutVendedor;
+            return true; // Permitir el envío del formulario
+        } else {
+            rutError.style.display = 'block';
+            alert('RUT inválido');
+            return false; // Evitar el envío del formulario
+        }
+    }
+
+    function formatearRut(rut) {
+        // Eliminar puntos y guiones
+        rut = rut.replace(/\./g, '').replace(/-/g, '');
+
+        // Obtener el número y el dígito verificador
+        const numero = rut.slice(0, -1);
+        const dv = rut.slice(-1);
+
+        // Formatear con puntos
+        let formattedRut = '';
+        for (let i = numero.length - 1, j = 1; i >= 0; i--, j++) {
+            formattedRut = numero.charAt(i) + formattedRut;
+            if (j % 3 === 0 && i !== 0) {
+                formattedRut = '.' + formattedRut;
+            }
+        }
+
+        // Agregar el guion y retornar el RUT formateado
+        return formattedRut + '-' + dv;
+        }
+
+    function validarRut(rut) {
+        if (!rut || !/^[0-9.]+-[0-9kK]{1}$/.test(rut)) {
+            return false;
+        }
+        const [num, dv] = rut.split('-');
+        const cleanNum = num.replace(/\./g, ''); // Remover puntos para la validación
+        return dv.toLowerCase() === calcularDV(cleanNum);
+    }
+
+    function calcularDV(rut) {
+        let suma = 0;
+        let multiplo = 2;
+
+        for (let i = rut.length - 1; i >= 0; i--) {
+            suma += multiplo * rut.charAt(i);
+            multiplo = (multiplo + 1) % 8 || 2;
+        }
+
+        const dv = 11 - (suma % 11);
+        if (dv === 11) {
+            return '0';
+        } else if (dv === 10) {
+            return 'k';
+        } else {
+            return dv.toString();
+        }
+    }
+</script>
+
 {% endblock %}
