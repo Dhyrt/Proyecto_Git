@@ -58,12 +58,8 @@ Django es un framework de desarrollo web robusto y escalable que permite una rá
    ```
    pip install -r requirements.txt
    ```
-4. Realizar migraciones de la base de datos:
-   ```
-   python manage.py migrate
-   ```
-5. Ejecutar el servidor de desarrollo:
+4. Ejecutar el servidor de desarrollo:
    ```
    python manage.py runserver
    ```
-6. Abrir un navegador web y navegar a http://127.0.0.1:8000 para ver la aplicación en funcionamiento.
+5. Abrir un navegador web y navegar a http://127.0.0.1:8000 para ver la aplicación en funcionamiento.

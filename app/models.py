@@ -12,6 +12,10 @@ class Orden(models.Model):
     telefono = models.CharField(max_length=125)
     correo = models.EmailField()
     codigo_postal = models.IntegerField()
+    vendedor = models.CharField(max_length=125)
+    rut_vendedor = models.CharField(max_length=125)
+    telefono_vendedor = models.CharField(max_length=125)
+    correo_vendedor = models.EmailField()
 
     def __str__(self):
         return str(self.id_orden)
@@ -111,6 +115,7 @@ class Aceptacion(models.Model):
 def create_initial_estados(sender, **kwargs):
     Estado.objects.get_or_create(estado='Creada')
     Estado.objects.get_or_create(estado='Rectificada')
+    Estado.objects.get_or_create(estado='Anulada')
     EstadoEntrega.objects.get_or_create(estado_entrega='Por entregar')
     EstadoEntrega.objects.get_or_create(estado_entrega='Entregado')
     EstadoEntrega.objects.get_or_create(estado_entrega='Rechazado')

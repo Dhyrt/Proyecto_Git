@@ -5,6 +5,10 @@ from django.http import HttpResponse
 from xhtml2pdf import pisa
 from bs4 import BeautifulSoup
 from django.template.loader import get_template
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from PyPDF2 import PdfWriter, PdfReader
 from .forms import *
 from .models import *
 
@@ -101,16 +105,59 @@ def factura(request, orden_id):
         orden = Orden.objects.get(id_orden=orden_id)
         return render(request, 'app/factura.html', {'orden': orden})
 
+def render_to_pdf(html):
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode('UTF-8')), result)
+    if not pdf.err:
+        return result.getvalue()
+    return None
+
+def add_watermark(input_pdf, watermark_text):
+    packet = BytesIO()
+    can = canvas.Canvas(packet, pagesize=letter)
+    can.setFont("Helvetica", 100)
+    can.setFillColorRGB(255.9, 0.9, 0.9, alpha=0.8)  # Light gray color
+    can.saveState()
+    can.translate(300, 500)
+    can.rotate(45)
+    can.drawCentredString(0, 0, watermark_text)
+    can.restoreState()
+    can.save()
+
+    packet.seek(0)
+    watermark = PdfReader(packet)
+    existing_pdf = PdfReader(BytesIO(input_pdf))
+    output = PdfWriter()
+
+    for i in range(len(existing_pdf.pages)):
+        page = existing_pdf.pages[i]
+        page.merge_page(watermark.pages[0])
+        output.add_page(page)
+
+    output_stream = BytesIO()
+    output.write(output_stream)
+    return output_stream.getvalue()
+
 @login_required    
 def detalle_factura(request, id_factura):
-    
-    factura = Factura.objects.filter(id_factura=id_factura)
-    productos = ProductoFactura.objects.filter(factura=id_factura)
+    factura = get_object_or_404(Factura, id_factura=id_factura)
+    productos = ProductoFactura.objects.filter(factura=factura)
+    rechazos = HistorialRechazo.objects.filter(factura=id_factura)
+    aceptacion = Aceptacion.objects.filter(factura=id_factura)
 
     datos = {
-        'listaFactura': factura,
-        'productos': productos
+        'listaFactura': [factura],
+        'productos': productos,
+        'rechazos': rechazos,
+        'aceptacion': aceptacion
     }
+
+    estado_fact = Estado.objects.get(estado='Anulada')
+    if request.method == 'POST':
+        factura.estado = estado_fact
+        factura.save()
+        return redirect('detalle_factura', id_factura=id_factura)
+
     if request.GET.get('download') == 'pdf':
         template = get_template('app/detalle_factura.html')
         html = template.render(datos)
@@ -118,17 +165,19 @@ def detalle_factura(request, id_factura):
         # Usar BeautifulSoup para extraer solo el contenido deseado
         soup = BeautifulSoup(html, 'html.parser')
         pdf_content = soup.find(class_='pdf-content')
-        html = str(pdf_content)  # Convertir de nuevo a string
+        html = str(pdf_content) if pdf_content else html  # Convertir de nuevo a string
 
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="detalle_factura_{}.pdf"'.format(id_factura)
+        pdf = render_to_pdf(html)
+        if pdf:
+            if factura.estado.estado == 'Anulada':
+                pdf = add_watermark(pdf, "ANULADA")
 
-        pisa_status = pisa.CreatePDF(html, dest=response)
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="detalle_factura_{id_factura}.pdf"'
+            return response
 
-        if pisa_status.err:
-            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return HttpResponse('Tuvimos algunos errores <pre>' + html + '</pre>')
 
-        return response
     return render(request, 'app/detalle_factura.html', datos)
 
 def modificar(request, id_factura):

@@ -124,32 +124,55 @@
               </form>
         </div>
         <div class="container mb-5">
+            {% if facturas %}
             <table class="table table-hover">
-            <thead>
-                <th class="py-3">Codigo</th>
-                <th class="py-3">Estado Factura</th>
-                <th class="py-3">Estado Orden</th>
-                <th class="py-3">Empresa</th>
-                <th class="py-3">Direccion</th>
-                <th class="py-3">Telefono</th>
-                <th class="py-3"></th>
-                <th class="py-3"></th>
-            </thead>
-            <tbody>
-            {% for factura in facturas %}
-            <tr>
-                <td class="py-3">#{{ factura.id_factura }}</td>
-                <td class="py-3">{{ factura.estado }}</td>
-                <td class="py-3">{{ factura.estado_entrega }}</td>
-                <td class="py-3">{{ factura.orden.empresa }}</td>
-                <td class="py-3">{{ factura.orden.direccion }}</td>
-                <td class="py-3">{{ factura.orden.telefono }}</td>
-                <td class="py-3"><a href="{% url 'detalle_factura' factura.id_factura %}" class="nav-link">Detalles</a></td>
-                <td class="py-3"><a href="{% url 'modificar' factura.id_factura %}" class="nav-link">Modificar</a></td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                <thead>
+                    <th class="py-3">Codigo</th>
+                    <th class="py-3">Estado Factura</th>
+                    <th class="py-3">Estado Orden</th>
+                    <th class="py-3">Empresa</th>
+                    <th class="py-3">Direccion</th>
+                    <th class="py-3">Telefono</th>
+                    <th class="py-3"></th>
+                    <th class="py-3"></th>
+                </thead>
+                <tbody>
+                {% for factura in facturas %}
+                {% if factura.estado_entrega.estado_entrega == 'Por entregar' and factura.estado.estado != 'Anulada' %}
+                <tr class="table-primary">
+                {% elif factura.estado_entrega.estado_entrega == 'Rechazado' and factura.estado.estado != 'Anulada' %}
+                <tr class="table-warning">
+                {% elif factura.estado_entrega.estado_entrega == 'Entregado' and factura.estado.estado != 'Anulada' %}
+                <tr class="table-success">
+                {% elif factura.estado.estado == 'Anulada' %}
+                <tr class="table-danger">
+                {% endif %}
+                    <td class="py-3">#{{ factura.id_factura }}</td>
+                    <td class="py-3">{{ factura.estado }}</td>
+                    {% if factura.estado.estado != 'Anulada'%}
+                    <td class="py-3">{{ factura.estado_entrega }}</td>
+                    {% else %}
+                    <td class="py-3"></td>
+                    {% endif %}
+                    <td class="py-3">{{ factura.orden.empresa }}</td>
+                    <td class="py-3">{{ factura.orden.direccion }}</td>
+                    <td class="py-3">{{ factura.orden.telefono }}</td>
+                    <td class="py-3"><a href="{% url 'detalle_factura' factura.id_factura %}" class="nav-link">Detalles</a></td>
+                    {% if factura.estado.estado != 'Anulada' and factura.estado_entrega.estado_entrega != 'Entregado' %}
+                    <td class="py-3"><a href="{% url 'modificar' factura.id_factura %}" class="nav-link">Rectificar</a></td>
+                    {% else %}
+                    <td class="py-3"></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                </tbody>
+             </table>
+            {% else %}
+            <div class="d-flex gap-5">
+                <h5>No se encontraron facturas</h5>
+                <a href="{% url 'orden' %}" class="btn btn-success">Realizar una orden</a>
+            </div>
+            {% endif %}
         </div>
         
         {% else %}
