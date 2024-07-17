@@ -3,3 +3,4 @@ crispy-bootstrap4
 xhtml2pdf
 beautifulsoup4
 reportlab
+PyPDF2

@@ -8,17 +8,17 @@
   {% for factura in listaFactura %}
   <div class="card mb-4 pdf-content">
     <div class="card-header">
-      <h5 class="card-title pt-2">Detalle de Factura - Código: {{ factura.id_factura }}</h5>
+      <h5 class="card-title pt-2">Detalle de Factura - Codigo: {{ factura.id_factura }}</h5>
     </div>
     <div class="card-body">
       <div class="row">
         <div class="col-md-6">
-          <h6 class="card-subtitle mb-2 text-muted">Información de la Empresa</h6>
+          <h6 class="card-subtitle mb-2 text-muted">Informacion de la Empresa</h6>
           <p><strong>Empresa:</strong> {{ factura.orden.empresa }}</p>
-          <p><strong>Dirección:</strong> {{ factura.orden.direccion }}</p>
-          <p><strong>Teléfono:</strong> {{ factura.orden.telefono }}</p>
+          <p><strong>Direccion:</strong> {{ factura.orden.direccion }}</p>
+          <p><strong>Telefono:</strong> {{ factura.orden.telefono }}</p>
           <p><strong>Correo:</strong> {{ factura.orden.correo }}</p>
-          <p><strong>Código Postal:</strong> {{ factura.orden.codigo_postal }}</p>
+          <p><strong>Codigo Postal:</strong> {{ factura.orden.codigo_postal }}</p>
         </div>
         <div class="col-md-6">
           <h6 class="card-subtitle mb-2 text-muted">Totales:</h6>
@@ -112,9 +112,19 @@
   <div class="d-flex justify-content-between mb-4">
     <div>
         <a href="{% url 'detalle_factura' id_factura=factura.id_factura %}?download=pdf" class="btn btn-success">Descargar PDF</a>
+        {% if factura.estado.estado != 'Anulada' and factura.estado_entrega.estado_entrega != 'Entregado' %}
         <a href="{% url 'modificar' factura.id_factura %}" class="btn btn-primary mx-2">Modificar</a>
+        {% endif %}
     </div>
-    <a href="{% url 'index' %}" class="btn btn-primary ml-auto">Volver al inicio</a>
+    <div class="d-flex justify-content-between grid gap-2">
+      {% if factura.estado.estado != 'Anulada' and factura.estado_entrega.estado_entrega != 'Entregado' %}
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Anular Factura</button>
+      </form>
+      {% endif %}
+      <a href="{% url 'index' %}" class="btn btn-primary">Volver al inicio</a>
+    </div>
 </div>
   {% endfor %}
 </div>
