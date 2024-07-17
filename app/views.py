@@ -42,16 +42,26 @@ def orden(request):
         correo = request.POST.get('correo')
         codigo_postal = request.POST.get('codigoPostal')
 
+        nombre_vendedor = request.POST.get('nombreVendedor')
+        rut_vendedor = request.POST.get('rutVendedor')
+        direccion_vendedor = request.POST.get('direccionVendedor')
+        telefono_vendedor = request.POST.get('telefonoVendedor')
+        correo_vendedor = request.POST.get('correoVendedor')
+
         nueva_orden = Orden.objects.create(
-            empresa=nombre_cliente,
-            direccion=direccion,
-            telefono=telefono,
-            correo=correo,
-            codigo_postal=int(codigo_postal)
+            nombre_cliente=nombre_cliente,
+            direccion_cliente=direccion,
+            telefono_cliente=telefono,
+            correo_cliente=correo,
+            codigo_postal_cliente=int(codigo_postal),
+            nombre_vendedor=nombre_vendedor,
+            rut_vendedor=rut_vendedor,
+            telefono_vendedor=telefono_vendedor,
+            correo_vendedor=correo_vendedor
         )
 
         # Redirigir a la página de factura, pasando el id de la orden recién creada
-        return redirect('factura', orden_id=nueva_orden.id_orden)
+        return redirect('factura', orden_id=nueva_orden.id)
 
     return render(request, 'app/orden.html')
 
